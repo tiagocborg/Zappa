@@ -598,6 +598,13 @@ class LambdaHandler(object):
             return content
 
 
+def log(metric_name, metric_type='count', metric_value=1, tags=None):
+    if tags is None:
+        tags = []
+    print("MONITORING|{}|{}|{}|{}|#{}".format(
+        int(time.time()), metric_value, metric_type, 'hasher.lambda.' + metric_name, ','.join(tags)
+    ))
+    
 def lambda_handler(event, context):  # pragma: no cover
     log(metric_name='requests', tags=['hash-service'])
     return LambdaHandler.lambda_handler(event, context)
