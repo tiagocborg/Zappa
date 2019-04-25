@@ -16,6 +16,8 @@ import time
 
 from builtins import str
 from werkzeug.wrappers import Response
+from datadog import datadog_lambda_wrapper, lambda_metric
+
 
 # This file may be copied into a project's root,
 # so handle both scenarios.
@@ -605,8 +607,11 @@ def log(metric_name, metric_type='count', metric_value=1, tags=None):
     print("MONITORING|{}|{}|{}|{}|#{}".format(
         int(time.time()), metric_value, metric_type, 'hasher.lambda.' + metric_name, ','.join(tags)
     ))
-    
+ 
+@datadog_lambda_wrapper
 def lambda_handler(event, context):  # pragma: no cover
+    for i in range(0, 10):
+        lambda_metric("lambda_custom_metric",i, tags=['owner:temp', 'env:demo'])
     log(metric_name='requests', tags=['hash-service'])
     return LambdaHandler.lambda_handler(event, context)
 
