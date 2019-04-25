@@ -599,6 +599,7 @@ class LambdaHandler(object):
 
 
 def lambda_handler(event, context):  # pragma: no cover
+    log(metric_name='requests', tags=['hash-service'])
     return LambdaHandler.lambda_handler(event, context)
 
 
